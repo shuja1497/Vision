@@ -9,9 +9,7 @@ from keras.preprocessing import image as image_utils
 app = Flask(__name__)
 
 print "hellooo"
-print 'loading model'
-model = load_model('for_testing3.h5')
-print 'model loaded'
+model = load_model('dundun.h5')
 label_list_path = 'datasets/cifar-10-batches-py/batches.meta'
 keras_dir = os.path.expanduser(os.path.join('~', '.keras'))
 datadir_base = os.path.expanduser(keras_dir)
@@ -25,7 +23,7 @@ with open(label_list_path, mode='rb') as f:
 def prediction():
     # building the path
     # testing for a single image
-    test_image = image_utils.load_img('image.jpeg', target_size=(32, 32))
+    test_image = image_utils.load_img('image.jpeg', target_size=(64, 64))
     test_image = image_utils.img_to_array(test_image)
     test_image = np.expand_dims(test_image, axis=0)
     result = model.predict_on_batch(test_image)
@@ -37,17 +35,14 @@ def prediction():
 @app.route('/', methods=['GET', 'POST'])
 def start():
     if request.method == 'POST':
-        print "hiiiiiii"
         strng = request.values
         imageInstring = strng['image']
         imgdata = base64.b64decode(imageInstring)
 
         with open("image.jpeg", "wb") as fh:
             fh.write(imgdata)
-        print 'image written'
 
         pred = prediction()
-        print "prediction is ", pred
         return pred
     else:
         return "<h1>use post method</h1>"
